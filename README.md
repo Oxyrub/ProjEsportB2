@@ -3,5 +3,5 @@ But : Développer une application client lourd pour permettre de gérer des comp
 
 Sujet : Logiciel de gestion de compétition pour le jeu 'Battlerite'.
 
-Langage et technologies :- C# (.NET) en application WPF
+Langage et technologies :- C# (.NET) en application WPF \n
                          - un stockage en local avec Realm
