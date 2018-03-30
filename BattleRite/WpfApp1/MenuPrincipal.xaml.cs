@@ -5,7 +5,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 
-namespace Menu
+namespace WpfApp1
 {
     /// <summary>
     /// Logique d'interaction pour MainWindow.xaml
@@ -118,6 +118,14 @@ namespace Menu
             Grid obj = (Grid)sender;
             obj.Background = Brushes.Blue;
             selectedGrid = obj.Name.Substring(8);
+        }
+
+        public void CreateTournament(object sender, RoutedEventArgs e)
+        {
+            MainWindow main = new MainWindow();
+            App.Current.MainWindow = main;
+            this.Close();
+            main.Show();
         }
 
     }
