@@ -23,6 +23,8 @@ namespace WpfApp1
         public MainWindow()
         {
             InitializeComponent();
+            List<Team> t = (List<Team>)App.Current.Properties["team"];
+            labelTeam.Content = t[0].Name;
         }
     }
 }

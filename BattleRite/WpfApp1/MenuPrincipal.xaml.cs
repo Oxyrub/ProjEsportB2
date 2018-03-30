@@ -112,8 +112,8 @@ namespace WpfApp1
                 SolidColorBrush color;
                 if (Int32.Parse(selectedGrid) % 2 == 0) color = Brushes.DarkGray;
                 else color = Brushes.LightGray;
-                object gridName = this.FindName("gridName" + selectedGrid);
-                ((Grid)gridName).Background = Brushes.Gray;
+                Grid gridName = (Grid) this.FindName("gridName" + selectedGrid);
+                gridName.Background = Brushes.Gray;
             }
             Grid obj = (Grid)sender;
             obj.Background = Brushes.Blue;
@@ -122,6 +122,16 @@ namespace WpfApp1
 
         public void CreateTournament(object sender, RoutedEventArgs e)
         {
+
+            Grid gridName = (Grid) this.FindName("gridName" + selectedGrid);
+            Label l = (Label)VisualTreeHelper.GetChild(VisualTreeHelper.GetChild(VisualTreeHelper.GetChild(gridName, 0), 0), 0);
+            List<Team> t = new List<Team>
+            {
+                new Team(l.Content.ToString())
+            };
+
+            App.Current.Properties["team"] = t;
+
             MainWindow main = new MainWindow();
             App.Current.MainWindow = main;
             this.Close();
