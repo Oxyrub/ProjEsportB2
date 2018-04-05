@@ -25,6 +25,9 @@ namespace WpfApp1
             InitializeComponent();
             List<Team> t = (List<Team>)App.Current.Properties["team"];
             labelTeam.Content = t[0].Name;
+
+            Gestion gestion = new Gestion();
+
         }
     }
 }
