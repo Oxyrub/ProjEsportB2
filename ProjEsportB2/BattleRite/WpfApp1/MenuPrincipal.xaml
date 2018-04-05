@@ -1,0 +1,62 @@
+﻿<Window x:Class="WpfApp1.MenuPrincipal"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WpfApp1"
+        mc:Ignorable="d"
+        Title="BattleRiteTournament" MinHeight="117" MinWidth="308" Height="350" Width="525">
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="8*"></ColumnDefinition>
+            <ColumnDefinition MinWidth="108" Width="44*"></ColumnDefinition>
+            <ColumnDefinition Width="8*"></ColumnDefinition>
+            <ColumnDefinition MinWidth="200" Width="40*"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <Grid Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="14*"></RowDefinition>
+                <RowDefinition MinHeight="40" Height="29*"></RowDefinition>
+                <RowDefinition Height="14*"></RowDefinition>
+                <RowDefinition MinHeight="40" Height="29*"></RowDefinition>
+                <RowDefinition Height="14*"></RowDefinition>
+            </Grid.RowDefinitions>
+            <Button Grid.Row="1" Content="Create Tournament" Click="CreateTournament"/>
+            <Button Grid.Row="3" Content="Add Teams"/>
+        </Grid>
+        <Border Grid.Column="3" BorderBrush="Gainsboro" BorderThickness="1">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"></RowDefinition>
+                    <RowDefinition Height="Auto"></RowDefinition>
+                    <RowDefinition Height="*"></RowDefinition>
+                </Grid.RowDefinitions>
+
+                <Border Grid.Row="0" Background="Gold" BorderBrush="Gainsboro" BorderThickness="1" MaxHeight="1cm">
+                    <Label HorizontalAlignment="Center" VerticalAlignment="Center" Content="Tournament"/>
+                </Border>
+                <Grid Grid.Row="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="33*"></ColumnDefinition>
+                        <ColumnDefinition Width="33*"></ColumnDefinition>
+                        <ColumnDefinition Width="33*"></ColumnDefinition>
+                        <ColumnDefinition Width="0.45cm"></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <Border Grid.Column="0" BorderBrush="Gainsboro" BorderThickness="1" MaxHeight="1cm">
+                        <Label VerticalAlignment="Center" HorizontalAlignment="Center" Content="Nom"></Label>
+                    </Border>
+                    <Border Grid.Column="1" BorderBrush="Gainsboro" BorderThickness="1" MaxHeight="1cm">
+                        <Label VerticalAlignment="Center" HorizontalAlignment="Center" Content="Lieu"></Label>
+                    </Border>
+                    <Border Grid.Column="2" BorderBrush="Gainsboro" BorderThickness="1" MaxHeight="1cm">
+                        <Label VerticalAlignment="Center" HorizontalAlignment="Center" Content="Participants"></Label>
+                    </Border>
+                </Grid>
+                <ScrollViewer Grid.Row="2" ScrollViewer.VerticalScrollBarVisibility="Visible">
+                    <Grid Name="listTournament"/>
+                </ScrollViewer>
+            </Grid>
+        </Border>
+    </Grid>
+</Window>
