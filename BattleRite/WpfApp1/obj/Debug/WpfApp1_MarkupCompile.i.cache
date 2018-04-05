@@ -12,9 +12,13 @@ DEBUG;TRACE
 D:\GitRepository\ProjEsportB2\BattleRite\WpfApp1\App.xaml
 2-939716394
 
+<<<<<<< HEAD
 12-890687923
+=======
+121239911274
+>>>>>>> f5e01dcb58fd0169bcad640c64ac796f8b5c0843
 131569487696
 MainWindow.xaml;MenuPrincipal.xaml;
 
-True
+False
 

@@ -14,3 +14,4 @@ E:\Users\Mael\Desktop\EPSI\B2\GitHub\Esport\ProjEsportB2\BattleRite\WpfApp1\obj\
 E:\Users\Mael\Desktop\EPSI\B2\GitHub\Esport\ProjEsportB2\BattleRite\WpfApp1\obj\Debug\WpfApp1.csproj.CoreCompileInputs.cache
 E:\Users\Mael\Desktop\EPSI\B2\GitHub\Esport\ProjEsportB2\BattleRite\WpfApp1\obj\Debug\WpfApp1.exe
 E:\Users\Mael\Desktop\EPSI\B2\GitHub\Esport\ProjEsportB2\BattleRite\WpfApp1\obj\Debug\WpfApp1.pdb
+E:\Users\Mael\Desktop\EPSI\B2\GitHub\Esport\ProjEsportB2\BattleRite\WpfApp1\obj\Debug\WpfApp1.csprojResolveAssemblyReference.cache
