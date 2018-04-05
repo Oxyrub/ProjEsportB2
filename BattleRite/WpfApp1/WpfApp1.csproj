@@ -54,7 +54,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+<<<<<<< HEAD
+    <Compile Include="Player.cs" />
+=======
     <Compile Include="Gestion.cs" />
+>>>>>>> f5e01dcb58fd0169bcad640c64ac796f8b5c0843
     <Compile Include="Team.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
