@@ -8,7 +8,6 @@ namespace WpfApp1
 {
     class Team
     {
-        static int NbTeam { get; }
         public string Name { get; set; }
         public int Id { get; set; }
 
