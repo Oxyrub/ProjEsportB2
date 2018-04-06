@@ -16,16 +16,21 @@ namespace WpfApp1
     }
 
     [Serializable]
-    class Player
+    public class Player
     {
         public int Id { get; set; }
         public string PseudoBattlerite { get; set; }
         public string PseudoSteam { get; set; }
         public Rank PlayerRank { get; set; }
-    
-        public void SetRank (Rank rank)
+
+        public Player(int id, string pseudoSteam, string pseudoBattlerite, Rank rank)
         {
+            Id = id;
+            PseudoSteam = pseudoSteam;
+            PseudoBattlerite = pseudoBattlerite;
             PlayerRank = rank;
         }
+
+        public void SetRank(Rank rank) => PlayerRank = rank;
     }
 }

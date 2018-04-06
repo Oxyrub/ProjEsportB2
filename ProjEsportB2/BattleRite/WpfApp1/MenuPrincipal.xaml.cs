@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -17,19 +19,24 @@ namespace WpfApp1
         public MenuPrincipal()
         {
             InitializeComponent();
-            pageListTournoi();
+            PageListTournoi();
         }
 
-        public void pageListTournoi()
+        public void PageListTournoi()
         {
-            List<string> list = new List<string> {"Lyon E-sport" , "Arles sur tech", "100",
-                "Baise party", "soeur de sylvain", "50",
-                "epsi ligue", "?", "3",
-                "1", "2", "3" };
+            /*Gestion gestion = new Gestion();
+            gestion.AddTeam("Na'Vi");
+            gestion.AddPlayer("MamaLeRattata", "MamaLeRattata", Rank.platinium1);
+            gestion.AddTournoi("Lyon E - sport" , "Arles sur tech", 100);
+            gestion.AddTournoi("Baise party", "soeur de sylvain", 50);
+            gestion.AddTournoi("epsi ligue", "?", 3);
+            gestion.AddTournoi("1", "2", 3);
+            gestion.AddTournoi("The International 2018", "Montreal", 64444044);*/
+            Gestion gestion = Charger<Gestion>("BattleRiteSave.bin");
+            Enregistrer(gestion, "BattleRiteSave.bin");
 
-            for (int i = 0; i < list.Count / 3; i++)
+            for (int i = 0; i < gestion.CountTournoi; i++)
             {
-
                 Grid addGrid = new Grid
                 {
                     HorizontalAlignment = HorizontalAlignment.Stretch,
@@ -63,7 +70,7 @@ namespace WpfApp1
                 Label labelNomTournoi = new Label
                 {
                     HorizontalAlignment = HorizontalAlignment.Center,
-                    Content = list[i * 3]
+                    Content = gestion.GetTournoi(i).Lieu
                 };
                 borderNomTournoi.Child = labelNomTournoi;
                 line1.Children.Add(borderNomTournoi);
@@ -75,7 +82,7 @@ namespace WpfApp1
                 line1.ColumnDefinitions.Add(row1col2);
                 Label labelLieu = new Label
                 {
-                    Content = list[i * 3 + 1],
+                    Content = gestion.GetTournoi(i).Nom,
                     HorizontalAlignment = HorizontalAlignment.Center
                 };
                 Grid.SetColumn(labelLieu, 1);
@@ -88,7 +95,7 @@ namespace WpfApp1
                 line1.ColumnDefinitions.Add(row1col3);
                 Label labelNbEquipe = new Label
                 {
-                    Content = list[i * 3 + 2],
+                    Content = gestion.GetTournoi(i).NbParticiepants,
                     HorizontalAlignment = HorizontalAlignment.Center
                 };
                 Grid.SetColumn(labelNbEquipe, 2);
@@ -113,7 +120,7 @@ namespace WpfApp1
                 if (Int32.Parse(selectedGrid) % 2 == 0) color = Brushes.DarkGray;
                 else color = Brushes.LightGray;
                 Grid gridName = (Grid) this.FindName("gridName" + selectedGrid);
-                gridName.Background = Brushes.Gray;
+                gridName.Background = color;
             }
             Grid obj = (Grid)sender;
             obj.Background = Brushes.Blue;
@@ -122,7 +129,6 @@ namespace WpfApp1
 
         public void CreateTournament(object sender, RoutedEventArgs e)
         {
-
             Grid gridName = (Grid) this.FindName("gridName" + selectedGrid);
             Label l = (Label)VisualTreeHelper.GetChild(VisualTreeHelper.GetChild(VisualTreeHelper.GetChild(gridName, 0), 0), 0);
             List<Team> t = new List<Team>
@@ -136,6 +142,42 @@ namespace WpfApp1
             App.Current.MainWindow = main;
             this.Close();
             main.Show();
+        }
+        private static void Enregistrer(object toSave, string path)
+        {
+             BinaryFormatter formatter = new BinaryFormatter();
+             FileStream flux = null;
+            try
+            {
+                flux = new FileStream(path, FileMode.Create, FileAccess.Write);
+                formatter.Serialize(flux, toSave);
+                flux.Flush();
+            }
+            catch { }
+            finally
+            {
+                if (flux != null)
+                    flux.Close();
+            }
+        }
+        private static T Charger<T>(string path)
+        {
+            BinaryFormatter formatter = new BinaryFormatter();
+            FileStream flux = null;
+            try
+            {
+                 flux = new FileStream(path, FileMode.Open, FileAccess.Read);
+                return (T)formatter.Deserialize(flux);
+            }
+            catch
+            {
+                return default(T);
+            }
+            finally
+            {
+                if (flux != null)
+                    flux.Close();
+            }
         }
 
     }
