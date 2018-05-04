@@ -14,11 +14,14 @@ namespace WpfApp1
     /// </summary>
     public partial class MenuPrincipal : Window
     {
-        private string selectedGrid = "-1";
+        private string selectedGrid = "";
+        private Gestion gestion;
 
         public MenuPrincipal()
         {
             InitializeComponent();
+            gestion = Charger<Gestion>("BattleRiteSave.bin");
+            Enregistrer(gestion, "BattleRiteSave.bin");
             PageListTournoi();
         }
 
@@ -32,15 +35,14 @@ namespace WpfApp1
             gestion.AddTournoi("epsi ligue", "?", 3);
             gestion.AddTournoi("1", "2", 3);
             gestion.AddTournoi("The International 2018", "Montreal", 64444044);*/
-            Gestion gestion = Charger<Gestion>("BattleRiteSave.bin");
-            Enregistrer(gestion, "BattleRiteSave.bin");
 
             for (int i = 0; i < gestion.CountTournoi; i++)
             {
                 Grid addGrid = new Grid
                 {
                     HorizontalAlignment = HorizontalAlignment.Stretch,
-                    VerticalAlignment = VerticalAlignment.Top
+                    VerticalAlignment = VerticalAlignment.Top,
+                    Tag = gestion.GetTournoi(i).Id
                 };
                 if (i % 2 == 0) { addGrid.Background = Brushes.DarkGray; }
                 else { addGrid.Background = Brushes.LightGray; }
@@ -70,7 +72,7 @@ namespace WpfApp1
                 Label labelNomTournoi = new Label
                 {
                     HorizontalAlignment = HorizontalAlignment.Center,
-                    Content = gestion.GetTournoi(i).Lieu
+                    Content = gestion.GetTournoi(i).Nom
                 };
                 borderNomTournoi.Child = labelNomTournoi;
                 line1.Children.Add(borderNomTournoi);
@@ -82,7 +84,7 @@ namespace WpfApp1
                 line1.ColumnDefinitions.Add(row1col2);
                 Label labelLieu = new Label
                 {
-                    Content = gestion.GetTournoi(i).Nom,
+                    Content = gestion.GetTournoi(i).Lieu,
                     HorizontalAlignment = HorizontalAlignment.Center
                 };
                 Grid.SetColumn(labelLieu, 1);
@@ -114,7 +116,7 @@ namespace WpfApp1
 
         public void SelectTournoi(object sender, RoutedEventArgs e)
         {
-            if (selectedGrid != "-1")
+            if (selectedGrid != "")
             {
                 SolidColorBrush color;
                 if (Int32.Parse(selectedGrid) % 2 == 0) color = Brushes.DarkGray;
@@ -127,21 +129,34 @@ namespace WpfApp1
             selectedGrid = obj.Name.Substring(8);
         }
 
+        public Grid GetSelectedTournament()
+        {
+            Grid g = new Grid()
+            {
+                Tag = -1
+            };
+            if (selectedGrid != "")
+            {
+                g = (Grid)this.FindName("gridName" + selectedGrid);
+            }
+            return g;
+        }
+        public void EditTournament(object sender, RoutedEventArgs e)
+        {
+            Grid gridName = GetSelectedTournament();
+            if ((int)gridName.Tag != -1)
+            {
+                App.Current.Properties["tournoi"] = gestion.GetTournoi((int)gridName.Tag);
+
+                EditWindow main = new EditWindow();
+                App.Current.MainWindow = main;
+                this.Close();
+                main.Show();
+            }
+        }
         public void CreateTournament(object sender, RoutedEventArgs e)
         {
-            Grid gridName = (Grid) this.FindName("gridName" + selectedGrid);
-            Label l = (Label)VisualTreeHelper.GetChild(VisualTreeHelper.GetChild(VisualTreeHelper.GetChild(gridName, 0), 0), 0);
-            List<Team> t = new List<Team>
-            {
-                new Team(l.Content.ToString())
-            };
 
-            App.Current.Properties["team"] = t;
-
-            MainWindow main = new MainWindow();
-            App.Current.MainWindow = main;
-            this.Close();
-            main.Show();
         }
         private static void Enregistrer(object toSave, string path)
         {
