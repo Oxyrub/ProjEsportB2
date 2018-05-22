@@ -5,7 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WpfApp1"
         mc:Ignorable="d"
-        Title="BattleRiteTournament" MinHeight="117" MinWidth="308" Height="350" Width="525">
+        Title="BattleRiteTournament" MinHeight="117" MinWidth="308" Height="350" Width="525"
+        Closing="CloseWindow">
 
     <Grid>
         <Grid.ColumnDefinitions>

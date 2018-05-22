@@ -26,15 +26,17 @@ namespace WpfApp1
             ListTeams.Add(new Team(CountTeam, name, this));
             CountTeam++;
         }
-        public void AddPlayer(string pseudoSteam, string pseudoBattlerite, Rank rank)
+        public int AddPlayer(string pseudoSteam, string pseudoBattlerite, Rank rank)
         {
             ListPlayers.Add(new Player(CountJoeur, pseudoSteam, pseudoBattlerite, rank));
             CountJoeur++;
+            return CountJoeur - 1;
         }
-        public void AddTournoi(string nom, string lieu, int nbParticipants)
+        public int AddTournoi(string nom, string lieu, int bo, string typeTournoi, bool remplacement, string date, string heure, string regle, string info)
         {
-            ListTournoi.Add(new Tournoi(CountTournoi, lieu, nom, nbParticipants));
+            ListTournoi.Add(new Tournoi(CountTournoi, nom, lieu, bo, typeTournoi, remplacement, date, heure, regle, info));
             CountTournoi++;
+            return CountTournoi - 1;
         }
         public Team GetTeam(int id)
         {

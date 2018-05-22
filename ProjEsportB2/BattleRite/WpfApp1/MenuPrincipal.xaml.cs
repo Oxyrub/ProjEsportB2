@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Windows;
@@ -20,8 +21,36 @@ namespace WpfApp1
         public MenuPrincipal()
         {
             InitializeComponent();
-            gestion = Charger<Gestion>("BattleRiteSave.bin");
-            Enregistrer(gestion, "BattleRiteSave.bin");
+            if (App.Current.Properties["gestion"] != null)
+            {
+                gestion = (Gestion)App.Current.Properties["gestion"];
+            }
+            else
+            {
+                gestion = Charger<Gestion>("BattleRiteSave.bin");
+                /*gestion = new Gestion();
+                gestion.AddTeam("Virtus Pro");
+                gestion.AddTeam("Team Liquid");
+                gestion.AddTeam("PSG.LGD");
+                gestion.AddTeam("Mineski");
+                gestion.AddTeam("Evil Geniuses");
+                gestion.AddTeam("Vici Gaming");
+                gestion.AddTeam("TnC");
+                gestion.AddTeam("Newbee");
+                gestion.AddTeam("Fnatic");
+                gestion.AddTeam("Team Secret");
+                gestion.AddTeam("OpTic Gaming");
+                gestion.AddTeam("FlyToMoon");
+                gestion.AddTeam("Na'Vi");
+                gestion.AddTournoi("The International 2018", "Rogers Arena, Vancouver, Canada", 3, "Elimination direct", true, "01/01/0001", "17H", "", "");
+                gestion.AddTournoi("Worlds 2018", "Corée du Sud", 5, "Elimination direct", true, "01/01/0001", "17H", "", "");
+                Tournoi t = gestion.GetTournoi(0);
+                for (int i = 0; i < gestion.ListTeams.Count; i++)
+                {
+                    t.AddTeam(gestion.ListTeams[i]);
+                }
+                t.Start();*/
+            }
             PageListTournoi();
         }
 
@@ -42,17 +71,19 @@ namespace WpfApp1
                 {
                     HorizontalAlignment = HorizontalAlignment.Stretch,
                     VerticalAlignment = VerticalAlignment.Top,
-                    Tag = gestion.GetTournoi(i).Id
+                    Tag = gestion.GetTournoi(i).Id,
+                    Height = 60,
+                    Margin = new Thickness(0, i * 60, 0, 0),
+                    Name = "gridName" + i
                 };
                 if (i % 2 == 0) { addGrid.Background = Brushes.DarkGray; }
                 else { addGrid.Background = Brushes.LightGray; }
-                addGrid.Height = 60;
-                addGrid.Margin = new Thickness(0, i * 60, 0, 0);
                 addGrid.MouseDown += new MouseButtonEventHandler(SelectTournoi);
-                addGrid.Name = "gridName" + i;
                 RegisterName("gridName" + i, addGrid);
-                RowDefinition row1 = new RowDefinition();
-                row1.Height = new GridLength(50, GridUnitType.Star);
+                RowDefinition row1 = new RowDefinition
+                {
+                    Height = new GridLength(50, GridUnitType.Star)
+                };
                 addGrid.RowDefinitions.Add(row1);
                 Grid line1 = new Grid();
                 Grid.SetRow(line1, 0);
@@ -63,11 +94,10 @@ namespace WpfApp1
                 line1.ColumnDefinitions.Add(row1col1);
                 Border borderNomTournoi = new Border
                 {
-                    HorizontalAlignment = HorizontalAlignment.Left,
+                    HorizontalAlignment = HorizontalAlignment.Stretch,
                     BorderBrush = Brushes.Gainsboro,
                     BorderThickness = new Thickness(1)
                 };
-                borderNomTournoi.HorizontalAlignment = HorizontalAlignment.Stretch;
                 Grid.SetColumn(borderNomTournoi, 0);
                 Label labelNomTournoi = new Label
                 {
@@ -97,7 +127,7 @@ namespace WpfApp1
                 line1.ColumnDefinitions.Add(row1col3);
                 Label labelNbEquipe = new Label
                 {
-                    Content = gestion.GetTournoi(i).NbParticiepants,
+                    Content = gestion.GetTournoi(i).ListTeam.Count,
                     HorizontalAlignment = HorizontalAlignment.Center
                 };
                 Grid.SetColumn(labelNbEquipe, 2);
@@ -147,6 +177,7 @@ namespace WpfApp1
             if ((int)gridName.Tag != -1)
             {
                 App.Current.Properties["tournoi"] = gestion.GetTournoi((int)gridName.Tag);
+                App.Current.Properties["gestion"] = gestion;
 
                 EditWindow main = new EditWindow();
                 App.Current.MainWindow = main;
@@ -156,24 +187,12 @@ namespace WpfApp1
         }
         public void CreateTournament(object sender, RoutedEventArgs e)
         {
+            App.Current.Properties["gestion"] = gestion;
 
-        }
-        private static void Enregistrer(object toSave, string path)
-        {
-             BinaryFormatter formatter = new BinaryFormatter();
-             FileStream flux = null;
-            try
-            {
-                flux = new FileStream(path, FileMode.Create, FileAccess.Write);
-                formatter.Serialize(flux, toSave);
-                flux.Flush();
-            }
-            catch { }
-            finally
-            {
-                if (flux != null)
-                    flux.Close();
-            }
+            MainWindow main = new MainWindow();
+            App.Current.MainWindow = main;
+            this.Close();
+            main.Show();
         }
         private static T Charger<T>(string path)
         {
@@ -194,6 +213,26 @@ namespace WpfApp1
                     flux.Close();
             }
         }
-
+        private static void Enregistrer(object toSave, string path)
+        {
+            BinaryFormatter formatter = new BinaryFormatter();
+            FileStream flux = null;
+            try
+            {
+                flux = new FileStream(path, FileMode.Create, FileAccess.Write);
+                formatter.Serialize(flux, toSave);
+                flux.Flush();
+            }
+            catch { }
+            finally
+            {
+                if (flux != null)
+                    flux.Close();
+            }
+        }
+        private void CloseWindow(object sender, CancelEventArgs e)
+        {
+            Enregistrer(gestion, "BattleRiteSave.bin");
+        }
     }
 }

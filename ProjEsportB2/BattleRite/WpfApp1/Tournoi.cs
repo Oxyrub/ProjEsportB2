@@ -12,56 +12,80 @@ namespace WpfApp1
         public int Id { get; set; }
         public string Lieu { get; set; }
         public string Nom { get; set; }
-        public int NbParticiepants { get; set; }
+        public string TypeTournoi { get; set; }
+        public bool Remplacement { get; set; }
+        public string Date { get; set; }
+        public string Heure { get; set; }
+        public string Regle { get; set; }
+        public string Info { get; set; }
         public List<Team> ListTeam { get; set; } = new List<Team>();
         public List<Match> ListMatch { get; set; } = new List<Match>();
         public Team EquipeDeTrop { get; set; }
+        public int Bo { get; set; }
 
-        public Tournoi(int id, string nom, string lieu, int nbParticipants)
+        public Tournoi(int id, string nom, string lieu, int bo, string typeTournoi, bool remplacement, string date, string heure, string regle, string info)
         {
             Id = id;
             Lieu = lieu;
             Nom = nom;
-            NbParticiepants = nbParticipants;
+            Bo = bo;
+            TypeTournoi = typeTournoi;
+            Remplacement = remplacement;
+            Date = date;
+            Heure = heure;
+            Regle = regle;
+            Info = info;
         }
 
         public void AddTeam (Team t)
         {
             ListTeam.Add(t);
         }
-        public void MancheProchaine()
+        public Match GetMatch(int id)
         {
-            List<Match> ListLastMatch = GetLastMatch();
-            int i = 0;
-            while (i + 1 < ListLastMatch.Count)
+            for (int i = 0; i<ListMatch.Count; i++)
             {
-                Match NewMatch;
-                if (EquipeDeTrop != null)
-                {
-                    NewMatch = new Match(EquipeDeTrop, ListLastMatch[i].GetGagnant());
-                    ListLastMatch[i].Suivant = NewMatch;
-                    i++;
-                }
-                else
-                {
-                    NewMatch = new Match(ListLastMatch[i].GetGagnant(), ListLastMatch[i + 1].GetGagnant());
-                    ListLastMatch[i].Suivant = NewMatch;
-                    ListLastMatch[i + 1].Suivant = NewMatch;
-                    i += 2;
-                }
-                ListMatch.Add(NewMatch);
+                if (ListMatch[i].Id == id) return ListMatch[i];
             }
-            if (i < ListLastMatch.Count)
-            {
-                EquipeDeTrop = ListLastMatch[i].GetGagnant();
-            }
+            return null;
         }
         public void Start()
         {
             int i = 0;
+            int rest = 0;
+            Random rng = new Random();
+            ListTeam = ListTeam.OrderBy(item => rng.Next()).ToList();
             while (i + 1 < ListTeam.Count)
             {
-                ListMatch.Add(new Match(ListTeam[i], ListTeam[i + 1]));
+                ListMatch.Add(new Match(ListMatch.Count, ListTeam[i], ListTeam[i + 1], true));
+                i += 2;
+            }
+            if (i < ListTeam.Count)
+            {
+                ListMatch.Add(new Match(ListMatch.Count, ListTeam[i], ListTeam[i], false));
+                rest = ListTeam[i].Id;
+            }
+            List<Match> LastMatch = GetLastMatch().OrderBy(item => rng.Next()).ToList();
+            while (LastMatch.Count > 1)
+            {
+                Match NewMatch;
+                i = 0;
+                while (i + 1 < LastMatch.Count)
+                {
+                    NewMatch = new Match(ListMatch.Count, true);
+                    GetMatch(LastMatch[i].Id).Suivant = NewMatch;
+                    GetMatch(LastMatch[i + 1].Id).Suivant = NewMatch;
+                    ListMatch.Add(NewMatch);
+                    i += 2;
+                }
+                if (i < LastMatch.Count)
+                {
+                    NewMatch = new Match(ListMatch.Count, false);
+                    GetMatch(LastMatch[i].Id).Suivant = NewMatch;
+                    ListMatch.Add(NewMatch);
+                    rest = ListTeam[i].Id;
+                }
+                do { LastMatch = GetLastMatch().OrderBy(item => rng.Next()).ToList(); } while (LastMatch[LastMatch.Count - 1].Id == rest);
             }
         }
         public List<Team> GetTeamRestant()
@@ -77,14 +101,11 @@ namespace WpfApp1
         public List<Match> GetLastMatch()
         {
             List<Match> ListLastMatch = new List<Match>();
-            if (AllMatchEnded())
+            for (int i = 0; i < ListMatch.Count; i++)
             {
-                for (int i = 0; i < ListMatch.Count; i++)
+                if (ListMatch[i].Suivant == null)
                 {
-                    if (ListMatch[i].Suivant == null)
-                    {
-                        ListLastMatch.Add(ListMatch[i]);
-                    }
+                    ListLastMatch.Add(ListMatch[i]);
                 }
             }
             return ListLastMatch;
@@ -99,12 +120,20 @@ namespace WpfApp1
         }
         public List<Match> GetMatchNotEnded()
         {
-            List<Match> ListMatchNotEnded = new List<Match>();
+            List<Match> NotEnded = new List<Match>();
             for (int i = 0; i<ListMatch.Count; i++)
             {
-                if (ListMatch[i].GetGagnant() == null) ListMatchNotEnded.Add(ListMatch[i]);
+                if (ListMatch[i].Equipe1 != ListMatch[i].Equipe2 && ListMatch[i].Equipe1 != null && ListMatch[i].Equipe2 != null && ListMatch[i].GetGagnant() == null) NotEnded.Add(ListMatch[i]);
             }
-            return ListMatchNotEnded;
+            return NotEnded;
+        }
+        public bool Participe(int id)
+        {
+            for (int i = 0; i < ListTeam.Count; i++)
+            {
+                if (ListTeam[i].Id == id) return true;
+            }
+            return false;
         }
     }
 }

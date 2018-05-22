@@ -5,9 +5,144 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WpfApp1"
         mc:Ignorable="d"
-        Title="MainWindow" Height="350" Width="525">
-    <Grid>
-        <Label Name="labelTeam" Content="Label" HorizontalAlignment="Left" Margin="239,147,0,0" VerticalAlignment="Top"/>
+        Title="Battlerite Tournament Maker" Height="850" Width="1200"
+        Closing="CloseWindow">
+    <Grid Margin="20" Name="maGrid">
+        <!--Définition colonne et ligne-->
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*" />
+            <ColumnDefinition Width="1*" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50" />
+            <RowDefinition Height="450" />
+            <RowDefinition Height="200" />
+            <RowDefinition Height="100" />
+        </Grid.RowDefinitions>
+        <!--Création Contenu de chaque case-->
+        <TextBlock Grid.ColumnSpan="2" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="10" FontSize="24">Battlerite Tournament</TextBlock>
+        <!--Création de bordure-->
+        <!--Règles Tournoi-->
+        <Border Grid.Row="1" Background="GhostWhite" BorderBrush="Black" BorderThickness="3" Margin="10">
+            <ScrollViewer>
+                <StackPanel Margin="10">
+                    <TextBlock Margin="10" FontSize="16"><Run Text="Tournament rules"/></TextBlock>
 
+                    <Label FontWeight="Bold" Content="Nombre de BO ?"/>
+                    <WrapPanel Margin="10" Name="wrapBO">
+                        <RadioButton Margin="3" GroupName="BO" Content="1" Checked="CheckedBo"/>
+                        <RadioButton Margin="3" GroupName="BO" Content="3" Checked="CheckedBo"/>
+                        <RadioButton Margin="3" GroupName="BO" Content="5" Checked="CheckedBo"/>
+                        <RadioButton Margin="3" GroupName="BO" Content="7" Checked="CheckedBo"/>
+                        <RadioButton Margin="3" GroupName="BO" Content="9" Checked="CheckedBo"/>
+                        <RadioButton Margin="3" GroupName="BO" Content="11" Checked="CheckedBo"/>
+                    </WrapPanel>
+
+                    <Label FontWeight="Bold" Content="Type de match ?"/>
+                    <WrapPanel Margin="10">
+                        <RadioButton Margin="3" GroupName="match" Content="1v1" Checked="CheckedMatch"/>
+                        <RadioButton Margin="3" GroupName="match" Content="2v2" Checked="CheckedMatch"/>
+                        <RadioButton Margin="3" GroupName="match" Content="3v3" Checked="CheckedMatch"/>
+                    </WrapPanel>
+
+
+                    <Label FontWeight="Bold" Content="Type du tournoi ?"/>
+                    <WrapPanel Margin="10">
+                        <RadioButton Margin="3" GroupName="type" Content="Elimination direct" Checked="CheckedTournoi"/>
+                        <!--<RadioButton Margin="3" GroupName="type" Content="Double élimination" Checked="CheckedTournoi"/>
+                        <RadioButton Margin="3" GroupName="type" Content="Toute ronde" Checked="CheckedTournoi"/>-->
+                    </WrapPanel>
+
+                    <Label FontWeight="Bold" Content="Autoriser le remplacement ?"/>
+                    <WrapPanel Margin="10">
+                        <RadioButton Margin="3" GroupName="rempla" Content="Oui" Checked="CheckedRempla"/>
+                        <RadioButton Margin="3" GroupName="rempla" Content="Non" Checked="CheckedRempla"/>
+                    </WrapPanel>
+
+                    <Label FontWeight="Bold" Content="Commentaires ?"/>
+                    <TextBox AcceptsReturn="True" Name="rulesComment"  TextWrapping="Wrap" Height="40" TextChanged="TexteChange" />
+                </StackPanel>
+            </ScrollViewer>
+        </Border>
+        <!--Information Tournoi-->
+        <Border Grid.Row="1" Grid.Column="1" Background="GhostWhite" BorderBrush="Black" BorderThickness="3" Margin="10">
+            <ScrollViewer>
+                <StackPanel Margin="10">
+                    <TextBlock Margin="10" FontSize="16">Tournament informations</TextBlock>
+                    <Label FontWeight="Bold">Tournament's name ?</Label>
+                    <TextBox TextChanged="NameChange"  />
+                    <Label FontWeight="Bold">Lieu ?</Label>
+                    <TextBox TextChanged="LieuChange" />
+
+                    <Label FontWeight="Bold">Date ?</Label>
+                    <WrapPanel Margin="10">
+                        <DatePicker SelectedDateFormat="Short" MouseLeave="DateChange" />
+                    </WrapPanel>
+
+                    <Label FontWeight="Bold">Heure ?</Label>
+                    <WrapPanel Margin="10">
+                        <ComboBox Margin="3" MouseLeave="HeureChange">
+                            <ComboBoxItem>01H</ComboBoxItem>
+                            <ComboBoxItem>02H</ComboBoxItem>
+                            <ComboBoxItem>03H</ComboBoxItem>
+                            <ComboBoxItem>04H</ComboBoxItem>
+                            <ComboBoxItem>05H</ComboBoxItem>
+                            <ComboBoxItem>06H</ComboBoxItem>
+                            <ComboBoxItem>07H</ComboBoxItem>
+                            <ComboBoxItem>08H</ComboBoxItem>
+                            <ComboBoxItem IsSelected="True">09H</ComboBoxItem>
+                            <ComboBoxItem>10H</ComboBoxItem>
+                            <ComboBoxItem>11H</ComboBoxItem>
+                            <ComboBoxItem>12H</ComboBoxItem>
+                            <ComboBoxItem>13H</ComboBoxItem>
+                            <ComboBoxItem>14h</ComboBoxItem>
+                            <ComboBoxItem>15H</ComboBoxItem>
+                            <ComboBoxItem>16H</ComboBoxItem>
+                            <ComboBoxItem>17H</ComboBoxItem>
+                            <ComboBoxItem>18H</ComboBoxItem>
+                            <ComboBoxItem>19H</ComboBoxItem>
+                            <ComboBoxItem>20H</ComboBoxItem>
+                            <ComboBoxItem>21H</ComboBoxItem>
+                            <ComboBoxItem>22H</ComboBoxItem>
+                            <ComboBoxItem>23H</ComboBoxItem>
+                            <ComboBoxItem>00H</ComboBoxItem>
+                        </ComboBox>
+                    </WrapPanel>
+
+                    <Label FontWeight="Bold">Commentaires ?</Label>
+                    <TextBox AcceptsReturn="True" TextWrapping="Wrap" Height="50" TextChanged="TextRules"/>
+                </StackPanel>
+            </ScrollViewer>
+        </Border>
+        <Border Grid.Row="2" Grid.ColumnSpan="2" Background="GhostWhite" BorderBrush="Black" BorderThickness="3" Margin="10">
+            <ScrollViewer>
+                <StackPanel>
+                    <TextBlock HorizontalAlignment="Center" FontSize="24">Add Team</TextBlock>
+                    <WrapPanel>
+                        <Border BorderBrush="White" BorderThickness="1" Margin="10">
+                            <StackPanel Margin="5" VerticalAlignment="Center" HorizontalAlignment="Center">
+                                <ComboBox IsEditable="True" Width="200" Name="ListBoxTeam" >
+                                    <ComboBoxItem IsSelected="True">Choose team</ComboBoxItem>
+                                    <ComboBoxItem Content="Team#1"/>
+                                    <ComboBoxItem Content="Team#2"/>
+                                    <ComboBoxItem Content="Team#3"/>
+                                </ComboBox>
+                                <WrapPanel Margin="3">
+                                    <Button Margin="10" Width="75" Height="25" Click="AddTeam">Add</Button>
+                                    <Button Margin="10" Width="75" Height="25" Click="CreatEquipe">Create Team</Button>
+                                </WrapPanel>
+                            </StackPanel>
+                        </Border>
+                        <Border BorderBrush="White" BorderThickness="1" Margin="10">
+                            <WrapPanel Margin="5" VerticalAlignment="Center">
+                                <!--<TextBox Name="listTeam" Margin="20" Width="700" Height="100"></TextBox>-->
+                            </WrapPanel>
+                        </Border>
+                    </WrapPanel>
+                </StackPanel>
+            </ScrollViewer>
+        </Border>
+        <Button  Grid.Row="3" Grid.Column="0" VerticalAlignment="Top" Margin="10" Width="100" Height="50" Click="AfficherVal">Retour</Button>
+        <Button  Grid.Row="3" Grid.Column="1" VerticalAlignment="Top" Margin="10" Width="100" Height="50" Click="Button_Click">Créer</Button>
     </Grid>
 </Window>
