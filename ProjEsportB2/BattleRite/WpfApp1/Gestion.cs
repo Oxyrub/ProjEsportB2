@@ -15,11 +15,26 @@ namespace WpfApp1
         public List<Team> ListTeams { get; set; } = new List<Team>();
         public List<Player> ListPlayers { get; set; } = new List<Player>();
         public List<Tournoi> ListTournoi { get; set; } = new List<Tournoi>();
+        public string Color1 { get; set; }
+        public string Color2 { get; set; }
+        public string Color3 { get; set; }
+        public string Color4 { get; set; }
+        public string Color5 { get; set; }
+        public string Color6 { get; set; }
 
         public Gestion()
         {
             CountTeam = 0;
             CountJoeur = 0;
+        }
+        public void SetTheme(List<String> liste)
+        {
+            Color1 = liste[2];
+            Color2 = liste[3];
+            Color3 = liste[4];
+            Color4 = liste[5];
+            Color5 = liste[6];
+            Color6 = liste[7];
         }
         public void AddTeam(string name)
         {

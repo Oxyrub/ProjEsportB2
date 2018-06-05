@@ -1,0 +1,16 @@
+C:\Users\sylva\Desktop\test arboressence\test arboressence\bin\Debug\test arboressence.exe.config
+C:\Users\sylva\Desktop\test arboressence\test arboressence\bin\Debug\test arboressence.exe
+C:\Users\sylva\Desktop\test arboressence\test arboressence\bin\Debug\test arboressence.pdb
+C:\Users\sylva\Desktop\test arboressence\test arboressence\obj\Debug\test arboressence.csprojResolveAssemblyReference.cache
+C:\Users\sylva\Desktop\test arboressence\test arboressence\obj\Debug\MainWindow.g.cs
+C:\Users\sylva\Desktop\test arboressence\test arboressence\obj\Debug\App.g.cs
+C:\Users\sylva\Desktop\test arboressence\test arboressence\obj\Debug\GeneratedInternalTypeHelper.g.cs
+C:\Users\sylva\Desktop\test arboressence\test arboressence\obj\Debug\test arboressence_MarkupCompile.cache
+C:\Users\sylva\Desktop\test arboressence\test arboressence\obj\Debug\test arboressence_MarkupCompile.lref
+C:\Users\sylva\Desktop\test arboressence\test arboressence\obj\Debug\MainWindow.baml
+C:\Users\sylva\Desktop\test arboressence\test arboressence\obj\Debug\test arboressence.g.resources
+C:\Users\sylva\Desktop\test arboressence\test arboressence\obj\Debug\test_arboressence.Properties.Resources.resources
+C:\Users\sylva\Desktop\test arboressence\test arboressence\obj\Debug\test arboressence.csproj.GenerateResource.cache
+C:\Users\sylva\Desktop\test arboressence\test arboressence\obj\Debug\test arboressence.csproj.CoreCompileInputs.cache
+C:\Users\sylva\Desktop\test arboressence\test arboressence\obj\Debug\test arboressence.exe
+C:\Users\sylva\Desktop\test arboressence\test arboressence\obj\Debug\test arboressence.pdb

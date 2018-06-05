@@ -86,5 +86,10 @@ namespace WpfApp1
                 if (Suivant != null) _Suivant.AddTeam(Equipe1);
             }
         }
+        public void RemoveTeam(Team t)
+        {
+            if (Equipe1 == t) Equipe1 = null;
+            else if (Equipe2 == t) Equipe2 = null;
+        }
     }
 }

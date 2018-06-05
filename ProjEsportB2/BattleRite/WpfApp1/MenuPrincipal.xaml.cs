@@ -7,63 +7,77 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Navigation;
 
 namespace WpfApp1
 {
     /// <summary>
     /// Logique d'interaction pour MainWindow.xaml
     /// </summary>
-    public partial class MenuPrincipal : Window
+    public partial class MenuPrincipal : Page
     {
-        private string selectedGrid = "";
+        private String selectedGrid = "";
         private Gestion gestion;
 
         public MenuPrincipal()
         {
             InitializeComponent();
-            if (App.Current.Properties["gestion"] != null)
-            {
-                gestion = (Gestion)App.Current.Properties["gestion"];
-            }
-            else
-            {
-                gestion = Charger<Gestion>("BattleRiteSave.bin");
-                /*gestion = new Gestion();
-                gestion.AddTeam("Virtus Pro");
-                gestion.AddTeam("Team Liquid");
-                gestion.AddTeam("PSG.LGD");
-                gestion.AddTeam("Mineski");
-                gestion.AddTeam("Evil Geniuses");
-                gestion.AddTeam("Vici Gaming");
-                gestion.AddTeam("TnC");
-                gestion.AddTeam("Newbee");
-                gestion.AddTeam("Fnatic");
-                gestion.AddTeam("Team Secret");
-                gestion.AddTeam("OpTic Gaming");
-                gestion.AddTeam("FlyToMoon");
-                gestion.AddTeam("Na'Vi");
-                gestion.AddTournoi("The International 2018", "Rogers Arena, Vancouver, Canada", 3, "Elimination direct", true, "01/01/0001", "17H", "", "");
-                gestion.AddTournoi("Worlds 2018", "Corée du Sud", 5, "Elimination direct", true, "01/01/0001", "17H", "", "");
-                Tournoi t = gestion.GetTournoi(0);
-                for (int i = 0; i < gestion.ListTeams.Count; i++)
-                {
-                    t.AddTeam(gestion.ListTeams[i]);
-                }
-                t.Start();*/
-            }
+            gestion = Fenetre.gestion;
+            DataContext = gestion;
             PageListTournoi();
+            ThemeButtonCreate();
+        }
+
+        public void ThemeButtonCreate()
+        {
+            MenuItem MainMenu = ThemeButton;
+            MainMenu.Tag = Themes.Colors[0][0];
+            gestion.SetTheme(Themes.Colors[0]);
+            foreach (List<String> l in Themes.Colors)
+            {
+                MenuItem NewMenu = new MenuItem() {
+                    Header = l[1],
+                    Tag = l[0]
+                };
+                NewMenu.MouseEnter += new MouseEventHandler(PreviewTheme);
+                NewMenu.Click += new RoutedEventHandler(SetTheme);
+                MainMenu.Items.Add(NewMenu);
+            }
+        }
+
+        public void SetTheme(object sender, RoutedEventArgs e)
+        {
+            String s = (String)((MenuItem)sender).Tag;
+            ThemeButton.Tag = s;
+            ChangeTheme(s);
+        }
+        public void PreviewTheme(object sender, MouseEventArgs e)
+        {
+            MenuItem m = (MenuItem)sender;
+            ChangeTheme((String)m.Tag);
+        }
+        public void ResetThemeEvent(object sender, MouseEventArgs e)
+        {
+            ChangeTheme((String)ThemeButton.Tag);
+        }
+        public void ChangeTheme(String s)
+        {
+            foreach (List<String> l in Themes.Colors)
+            {
+                if (l[0] == s)
+                {
+                    gestion.Color1 = l[2];
+                    gestion.Color2 = l[3];
+                    gestion.Color3 = l[4];
+
+                    DataContext = null;
+                    DataContext = gestion;
+                }
+            }
         }
 
         public void PageListTournoi()
         {
-            /*Gestion gestion = new Gestion();
-            gestion.AddTeam("Na'Vi");
-            gestion.AddPlayer("MamaLeRattata", "MamaLeRattata", Rank.platinium1);
-            gestion.AddTournoi("Lyon E - sport" , "Arles sur tech", 100);
-            gestion.AddTournoi("Baise party", "soeur de sylvain", 50);
-            gestion.AddTournoi("epsi ligue", "?", 3);
-            gestion.AddTournoi("1", "2", 3);
-            gestion.AddTournoi("The International 2018", "Montreal", 64444044);*/
 
             for (int i = 0; i < gestion.CountTournoi; i++)
             {
@@ -73,9 +87,18 @@ namespace WpfApp1
                     VerticalAlignment = VerticalAlignment.Top,
                     Tag = gestion.GetTournoi(i).Id,
                     Height = 60,
-                    Margin = new Thickness(0, i * 60, 0, 0),
-                    Name = "gridName" + i
+                    Margin = new Thickness(10, i * 70, 10, 10),
+                    Name = "gridName" + i,
+                    Style = (Style) FindResource("Cursor")
                 };
+                System.Windows.Media.Effects.DropShadowEffect shadowEffect = new System.Windows.Media.Effects.DropShadowEffect
+                {
+                    ShadowDepth = 3,
+                    BlurRadius = 5,
+                    Color = Colors.Black,
+                    Opacity = 0.5
+                };
+                addGrid.Effect = shadowEffect;
                 if (i % 2 == 0) { addGrid.Background = Brushes.DarkGray; }
                 else { addGrid.Background = Brushes.LightGray; }
                 addGrid.MouseDown += new MouseButtonEventHandler(SelectTournoi);
@@ -95,7 +118,7 @@ namespace WpfApp1
                 Border borderNomTournoi = new Border
                 {
                     HorizontalAlignment = HorizontalAlignment.Stretch,
-                    BorderBrush = Brushes.Gainsboro,
+                    BorderBrush = Brushes.Black,
                     BorderThickness = new Thickness(1)
                 };
                 Grid.SetColumn(borderNomTournoi, 0);
@@ -155,7 +178,7 @@ namespace WpfApp1
                 gridName.Background = color;
             }
             Grid obj = (Grid)sender;
-            obj.Background = Brushes.Blue;
+            obj.Background = (SolidColorBrush) new BrushConverter().ConvertFromString("#FFB74D"); 
             selectedGrid = obj.Name.Substring(8);
         }
 
@@ -179,60 +202,20 @@ namespace WpfApp1
                 App.Current.Properties["tournoi"] = gestion.GetTournoi((int)gridName.Tag);
                 App.Current.Properties["gestion"] = gestion;
 
-                EditWindow main = new EditWindow();
-                App.Current.MainWindow = main;
-                this.Close();
-                main.Show();
+                //this.NavigationService.Navigate(new EditWindow());
+                this.NavigationService.Navigate(new ArbrePage());
             }
         }
         public void CreateTournament(object sender, RoutedEventArgs e)
         {
             App.Current.Properties["gestion"] = gestion;
 
-            MainWindow main = new MainWindow();
-            App.Current.MainWindow = main;
-            this.Close();
-            main.Show();
+            this.NavigationService.Navigate(new MainWindow());
         }
-        private static T Charger<T>(string path)
+        public void ContextMenuOnClick(object sender, RoutedEventArgs e)
         {
-            BinaryFormatter formatter = new BinaryFormatter();
-            FileStream flux = null;
-            try
-            {
-                 flux = new FileStream(path, FileMode.Open, FileAccess.Read);
-                return (T)formatter.Deserialize(flux);
-            }
-            catch
-            {
-                return default(T);
-            }
-            finally
-            {
-                if (flux != null)
-                    flux.Close();
-            }
-        }
-        private static void Enregistrer(object toSave, string path)
-        {
-            BinaryFormatter formatter = new BinaryFormatter();
-            FileStream flux = null;
-            try
-            {
-                flux = new FileStream(path, FileMode.Create, FileAccess.Write);
-                formatter.Serialize(flux, toSave);
-                flux.Flush();
-            }
-            catch { }
-            finally
-            {
-                if (flux != null)
-                    flux.Close();
-            }
-        }
-        private void CloseWindow(object sender, CancelEventArgs e)
-        {
-            Enregistrer(gestion, "BattleRiteSave.bin");
+            ((Button)sender).ContextMenu.DataContext = ((Button)sender).DataContext;
+            ((Button)sender).ContextMenu.IsOpen = true;
         }
     }
 }

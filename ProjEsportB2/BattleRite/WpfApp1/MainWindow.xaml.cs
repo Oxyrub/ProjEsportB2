@@ -21,17 +21,15 @@ namespace WpfApp1
     /// <summary>
     /// Logique d'interaction pour MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class MainWindow : Page
     {
         public MonSingleton saveData = new MonSingleton();
         public Gestion gestion;
 
-
         public MainWindow()
         {
             InitializeComponent();
-            this.DataContext = this;
-            gestion = (Gestion)App.Current.Properties["gestion"];
+            gestion = Fenetre.gestion;
             ListBoxActu();
         }
 
@@ -80,11 +78,7 @@ namespace WpfApp1
 
             App.Current.Properties["gestion"] = gestion;
 
-            MenuPrincipal main = new MenuPrincipal();
-            App.Current.MainWindow = main;
-            this.Close();
-            main.Show();
-
+            this.NavigationService.Navigate(new MenuPrincipal());
         }
 
         private void CheckedBo(object sender, RoutedEventArgs e)
@@ -168,27 +162,6 @@ namespace WpfApp1
         {
             addTeam add = new addTeam();
             add.Show();
-        }
-        private static void Enregistrer(object toSave, string path)
-        {
-            BinaryFormatter formatter = new BinaryFormatter();
-            FileStream flux = null;
-            try
-            {
-                flux = new FileStream(path, FileMode.Create, FileAccess.Write);
-                formatter.Serialize(flux, toSave);
-                flux.Flush();
-            }
-            catch { }
-            finally
-            {
-                if (flux != null)
-                    flux.Close();
-            }
-        }
-        private void CloseWindow(object sender, CancelEventArgs e)
-        {
-            Enregistrer(gestion, "BattleRiteSave.bin");
         }
     }
 }

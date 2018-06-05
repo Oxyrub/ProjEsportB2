@@ -1,18 +1,19 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Navigation;
 
 namespace WpfApp1
 {
     /// <summary>
     /// Logique d'interaction pour EditWindow.xaml
     /// </summary>
-    public partial class EditWindow : Window
+    public partial class EditWindow : Page
     {
-        public Gestion gestion;
         public Tournoi t;
         public EditWindow()
         {
@@ -20,12 +21,12 @@ namespace WpfApp1
             t = (Tournoi)App.Current.Properties["tournoi"];
             Title.Content = t.Nom;
             SubTitle.Content = "à " + t.Lieu + " avec " + t.ListTeam.Count + " participants";
-            gestion = (Gestion)App.Current.Properties["gestion"];
             if (t.ListMatch.Count > 0)
             {
                 StartButton.IsEnabled = false;
                 ActualiserListBox();
             }
+            //t.GetArbre();
         }
         public void StratTournoi(object sender, RoutedEventArgs e)
         {
@@ -109,33 +110,7 @@ namespace WpfApp1
         }
         private void RetourOnClick(object sender, RoutedEventArgs e)
         {
-            App.Current.Properties["gestion"] = gestion;
-
-            MenuPrincipal main = new MenuPrincipal();
-            App.Current.MainWindow = main;
-            this.Close();
-            main.Show();
-        }
-        private static void Enregistrer(object toSave, string path)
-        {
-            BinaryFormatter formatter = new BinaryFormatter();
-            FileStream flux = null;
-            try
-            {
-                flux = new FileStream(path, FileMode.Create, FileAccess.Write);
-                formatter.Serialize(flux, toSave);
-                flux.Flush();
-            }
-            catch { }
-            finally
-            {
-                if (flux != null)
-                    flux.Close();
-            }
-        }
-        private void CloseWindow(object sender, CancelEventArgs e)
-        {
-            Enregistrer(gestion, "BattleRiteSave.bin");
+            this.NavigationService.Navigate(new MenuPrincipal());
         }
     }
 }
